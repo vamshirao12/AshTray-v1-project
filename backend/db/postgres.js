@@ -1,0 +1,5 @@
+const {Pool}=require("pg"); const pool=new Pool({connectionString:process.env.POSTGRES_URL||"postgresql://ashtray:ashtray@localhost:5432/ashtray"});
+async function initPostgres(){await pool.query(`CREATE TABLE IF NOT EXISTS users_shadow(user_id TEXT PRIMARY KEY,email TEXT NOT NULL)`);await pool.query(`CREATE TABLE IF NOT EXISTS habit_events(id SERIAL PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users_shadow(user_id),event_type TEXT NOT NULL,value NUMERIC DEFAULT 0,created_at TIMESTAMPTZ DEFAULT NOW())`);await pool.query(`CREATE INDEX IF NOT EXISTS idx_habit_events_user_created ON habit_events(user_id,created_at DESC)`);}
+async function logEvent(userId,type,value=0){return pool.query("INSERT INTO habit_events(user_id,event_type,value) VALUES($1,$2,$3)",[String(userId),type,value]);}
+async function joinedEvents(userId){return pool.query(`SELECT e.id,e.event_type,e.value,e.created_at,u.email FROM habit_events e JOIN users_shadow u ON u.user_id=e.user_id WHERE e.user_id=$1 ORDER BY e.created_at DESC`,[String(userId)]);}
+module.exports={pool,initPostgres,logEvent,joinedEvents};

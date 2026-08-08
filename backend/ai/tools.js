@@ -1,0 +1,1 @@
+const tools=[{type:"function",function:{name:"get_weekly_summary",description:"Get a weekly summary",parameters:{type:"object",properties:{userId:{type:"string"}},required:["userId"]}}}]; async function executeTool(name,args,services){if(name!=="get_weekly_summary")throw new Error("Unknown tool");return services.getWeeklySummary(args.userId);} module.exports={tools,executeTool};

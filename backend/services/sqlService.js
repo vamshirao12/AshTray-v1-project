@@ -1,0 +1,1 @@
+const {pool,logEvent,joinedEvents}=require("../db/postgres"); async function recordHabitEvent(userId,email,type,value){await pool.query("INSERT INTO users_shadow(user_id,email) VALUES($1,$2) ON CONFLICT(user_id) DO UPDATE SET email=EXCLUDED.email",[String(userId),email]);return logEvent(userId,type,value);} module.exports={recordHabitEvent,joinedEvents};

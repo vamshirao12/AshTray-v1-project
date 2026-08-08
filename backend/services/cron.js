@@ -1,0 +1,1 @@
+const cron=require("node-cron"); function startJobs(){cron.schedule("0 0 * * *",()=>console.log("Daily analytics refresh"));cron.schedule("0 0 1 * *",()=>console.log("Monthly analytics refresh"));} module.exports={startJobs};
