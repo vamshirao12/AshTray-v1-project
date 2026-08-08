@@ -18,7 +18,7 @@ The application combines habit tracking, analytics, challenges, craving support,
 
 ## Features
 
-### 🔐 Authentication
+### Authentication
 
 - User registration and login
 - Secure password hashing with bcrypt
@@ -26,7 +26,7 @@ The application combines habit tracking, analytics, challenges, craving support,
 - Protected application routes
 - Persistent user sessions
 
-### 🚬 Cigarette Tracking
+### Cigarette Tracking
 
 - Record cigarette entries
 - Track brand, price, quantity, and timestamps
@@ -34,7 +34,7 @@ The application combines habit tracking, analytics, challenges, craving support,
 - Edit and delete entries
 - Maintain a personal smoking history
 
-### 📊 Analytics
+### Analytics
 
 - Daily and weekly cigarette statistics
 - Average cigarette consumption
@@ -43,13 +43,13 @@ The application combines habit tracking, analytics, challenges, craving support,
 - Personal activity trends
 - Visual analytics for easier understanding
 
-### 🎯 Daily Limit
+### Daily Limit
 
 - Set a personal daily cigarette limit
 - Update the limit from Settings
 - Use the limit as part of the application's progress and challenge logic
 
-### 🏆 Progress & Achievements
+### Progress & Achievements
 
 AshTray tracks progress through several milestones, including:
 
@@ -59,7 +59,7 @@ AshTray tracks progress through several milestones, including:
 - Reaching a 75% reduction
 - Working toward a zero-cigarette average
 
-### 🌿 Craving Support
+### Craving Support
 
 The Craving Help section provides simple actions users can take when experiencing an urge to smoke, such as:
 
@@ -69,11 +69,11 @@ The Craving Help section provides simple actions users can take when experiencin
 - Keeping hands occupied
 - Breaking automatic routines
 
-### 🧩 Challenges
+### Challenges
 
 Personal challenges encourage users to stay aware of their habits and gradually work toward their goals.
 
-### 👤 Personal Dashboard
+### Personal Dashboard
 
 The dashboard brings together:
 
@@ -86,7 +86,7 @@ The dashboard brings together:
 - Progress
 - Quick actions
 
-### 🧑‍💻 Builder / Project Story
+### Builder / Project Story
 
 AshTray also includes a dedicated Builder section describing the idea, development journey, technology stack, and engineering decisions behind the project.
 
@@ -162,35 +162,35 @@ It handles:
 
 MongoDB is used as the primary application database.
 
-
 ## Architecture
 
 AshTray follows a separated frontend/backend architecture.
 
 ```text
 AshTray
-│
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── services/
-│   │   └── ...
-│   ├── package.json
-│   └── vite.config.js
-│
-├── backend/
-│   ├── controllers/
-│   ├── middleware/
-│   ├── models/
-│   ├── routes/
-│   ├── services/
-│   ├── server.js
-│   ├── package.json
-│   └── .env.example
-│
-├── docker-compose.yml
-├── CONTRIBUTING.md
-├── RUBRIC.md
-├── .gitignore
-└── README.md
+|
++-- frontend/
+|   +-- src/
+|   |   +-- components/
+|   |   +-- pages/
+|   |   +-- services/
+|   |   +-- ...
+|   +-- package.json
+|   +-- vite.config.js
+|
++-- backend/
+|   +-- controllers/
+|   +-- middleware/
+|   +-- models/
+|   +-- routes/
+|   +-- services/
+|   +-- server.js
+|   +-- package.json
+|   +-- .env.example
+|
++-- docker-compose.yml
++-- CONTRIBUTING.md
++-- RUBRIC.md
++-- .gitignore
++-- README.md
+```
