@@ -1,5 +1,4 @@
 import { useState } from "react";
-import GlassCard from "./ui/GlassCard";
 import PrimaryButton from "./ui/PrimaryButton";
 import SecondaryButton from "./ui/SecondaryButton";
 import api from "../services/api";
@@ -93,9 +92,7 @@ const AddEntryModal = ({ onClose, onEntryAdded }) => {
           formData.quantity === ""
             ? 1
             : Number(formData.quantity),
-
-        trigger:
-          formData.trigger || "Not specified",
+        trigger: formData.trigger || "Not specified",
       };
 
       await api.post("/entries", payload, {
@@ -124,92 +121,79 @@ const AddEntryModal = ({ onClose, onEntryAdded }) => {
       className="
         fixed
         inset-0
-        z-50
+        z-[100]
         flex
         items-center
         justify-center
-        bg-[#33251F]/35
-        p-4
+        bg-[#33251F]/40
+        p-3
+        sm:p-6
         backdrop-blur-sm
       "
     >
-      <GlassCard
+      {/* Modal */}
+      <div
         className="
+          flex
           w-full
-          max-w-xl
+          max-w-lg
+          flex-col
+          overflow-hidden
+          rounded-[28px]
           border
           border-[#E4D1BD]
           bg-[#FFF9F1]
-          p-7
           shadow-2xl
+
+          max-h-[calc(100dvh-1.5rem)]
+          sm:max-h-[90dvh]
         "
       >
-        {/* Header */}
+        {/* Scrollable Content */}
+        <div
+          className="
+            min-h-0
+            flex-1
+            overflow-y-auto
+            overscroll-contain
+            px-5
+            py-5
+            sm:px-7
+            sm:py-7
+          "
+          style={{
+            WebkitOverflowScrolling: "touch",
+          }}
+        >
+          {/* Header */}
+          <div className="mb-7">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#C65D2E]">
+              Daily Check-in
+            </p>
 
-        <div className="mb-7">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#C65D2E]">
-            Daily Check-in
-          </p>
+            <h2 className="mt-2 text-2xl font-black text-[#33251F] sm:text-3xl">
+              Log an activity
+            </h2>
 
-          <h2 className="mt-2 text-3xl font-black text-[#33251F]">
-            Log an activity
-          </h2>
+            <p className="mt-2 text-sm leading-6 text-[#7A685D]">
+              Record what happened and what may have triggered it.
+            </p>
+          </div>
 
-          <p className="mt-2 text-sm leading-6 text-[#7A685D]">
-            Record what happened and what may have triggered it.
-          </p>
-        </div>
-
-        <form onSubmit={handleSubmit}>
-          <div className="space-y-5">
-
-            {/* Brand */}
-
-            <div>
-              <label className="mb-2 block text-sm font-semibold text-[#5F4D42]">
-                Brand
-              </label>
-
-              <input
-                name="brand"
-                placeholder="e.g. Marlboro"
-                value={formData.brand}
-                onChange={handleChange}
-                className="
-                  w-full
-                  rounded-2xl
-                  border
-                  border-[#E4D1BD]
-                  bg-[#F6EEE4]
-                  p-4
-                  text-[#33251F]
-                  placeholder:text-[#A99484]
-                  outline-none
-                  transition
-                  focus:border-[#C65D2E]
-                  focus:ring-2
-                  focus:ring-[#C65D2E]/10
-                "
-              />
-            </div>
-
-            {/* Price + Quantity */}
-
-            <div className="grid gap-4 sm:grid-cols-2">
-
+          <form onSubmit={handleSubmit}>
+            <div className="space-y-5">
+              {/* Brand */}
               <div>
                 <label className="mb-2 block text-sm font-semibold text-[#5F4D42]">
-                  Price
+                  Brand
                 </label>
 
                 <input
-                  name="price"
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  placeholder="₹0"
-                  value={formData.price}
+                  name="brand"
+                  placeholder="e.g. Marlboro"
+                  value={formData.brand}
                   onChange={handleChange}
+                  autoComplete="off"
                   className="
                     w-full
                     rounded-2xl
@@ -220,6 +204,7 @@ const AddEntryModal = ({ onClose, onEntryAdded }) => {
                     text-[#33251F]
                     placeholder:text-[#A99484]
                     outline-none
+                    transition
                     focus:border-[#C65D2E]
                     focus:ring-2
                     focus:ring-[#C65D2E]/10
@@ -227,125 +212,171 @@ const AddEntryModal = ({ onClose, onEntryAdded }) => {
                 />
               </div>
 
+              {/* Price + Quantity */}
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                {/* Price */}
+                <div>
+                  <label className="mb-2 block text-sm font-semibold text-[#5F4D42]">
+                    Price
+                  </label>
+
+                  <input
+                    name="price"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    inputMode="decimal"
+                    placeholder="₹0"
+                    value={formData.price}
+                    onChange={handleChange}
+                    className="
+                      w-full
+                      rounded-2xl
+                      border
+                      border-[#E4D1BD]
+                      bg-[#F6EEE4]
+                      p-4
+                      text-[#33251F]
+                      placeholder:text-[#A99484]
+                      outline-none
+                      focus:border-[#C65D2E]
+                      focus:ring-2
+                      focus:ring-[#C65D2E]/10
+                    "
+                  />
+                </div>
+
+                {/* Quantity */}
+                <div>
+                  <label className="mb-2 block text-sm font-semibold text-[#5F4D42]">
+                    Number of cigarettes
+                  </label>
+
+                  <input
+                    name="quantity"
+                    type="number"
+                    min="1"
+                    inputMode="numeric"
+                    placeholder="1"
+                    value={formData.quantity}
+                    onChange={handleChange}
+                    className="
+                      w-full
+                      rounded-2xl
+                      border
+                      border-[#E4D1BD]
+                      bg-[#F6EEE4]
+                      p-4
+                      text-[#33251F]
+                      placeholder:text-[#A99484]
+                      outline-none
+                      focus:border-[#C65D2E]
+                      focus:ring-2
+                      focus:ring-[#C65D2E]/10
+                    "
+                  />
+                </div>
+              </div>
+
+              {/* Trigger */}
               <div>
-                <label className="mb-2 block text-sm font-semibold text-[#5F4D42]">
-                  Number of cigarettes
+                <label className="mb-3 block text-sm font-semibold text-[#5F4D42]">
+                  What triggered it?
                 </label>
 
-                <input
-                  name="quantity"
-                  type="number"
-                  min="1"
-                  placeholder="1"
-                  value={formData.quantity}
-                  onChange={handleChange}
-                  className="
-                    w-full
-                    rounded-2xl
-                    border
-                    border-[#E4D1BD]
-                    bg-[#F6EEE4]
-                    p-4
-                    text-[#33251F]
-                    placeholder:text-[#A99484]
-                    outline-none
-                    focus:border-[#C65D2E]
-                    focus:ring-2
-                    focus:ring-[#C65D2E]/10
-                  "
-                />
-              </div>
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  {TRIGGERS.map((trigger) => {
+                    const selected =
+                      formData.trigger === trigger.value;
 
-            </div>
-
-            {/* Trigger */}
-
-            <div>
-              <label className="mb-3 block text-sm font-semibold text-[#5F4D42]">
-                What triggered it?
-              </label>
-
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-
-                {TRIGGERS.map((trigger) => {
-                  const selected =
-                    formData.trigger === trigger.value;
-
-                  return (
-                    <button
-                      key={trigger.value}
-                      type="button"
-                      onClick={() =>
-                        handleTriggerSelect(trigger.value)
-                      }
-                      className={`
-                        rounded-2xl
-                        border
-                        p-3
-                        text-left
-                        transition-all
-                        duration-200
-                        ${
-                          selected
-                            ? "border-[#C65D2E] bg-[#C65D2E]/10 text-[#9F4523] shadow-sm"
-                            : "border-[#E4D1BD] bg-[#F6EEE4] text-[#5F4D42] hover:border-[#C65D2E]/50 hover:bg-[#F2E4D5]"
+                    return (
+                      <button
+                        key={trigger.value}
+                        type="button"
+                        onClick={() =>
+                          handleTriggerSelect(trigger.value)
                         }
-                      `}
-                    >
-                      <span className="block text-xl">
-                        {trigger.icon}
-                      </span>
+                        className={`
+                          min-h-[76px]
+                          rounded-2xl
+                          border
+                          p-3
+                          text-left
+                          transition-all
+                          duration-200
+                          active:scale-[0.98]
 
-                      <span className="mt-1 block text-xs font-semibold">
-                        {trigger.label}
-                      </span>
-                    </button>
-                  );
-                })}
+                          ${
+                            selected
+                              ? "border-[#C65D2E] bg-[#C65D2E]/10 text-[#9F4523] shadow-sm"
+                              : "border-[#E4D1BD] bg-[#F6EEE4] text-[#5F4D42] hover:border-[#C65D2E]/50 hover:bg-[#F2E4D5]"
+                          }
+                        `}
+                      >
+                        <span className="block text-xl">
+                          {trigger.icon}
+                        </span>
 
+                        <span className="mt-1 block text-xs font-semibold">
+                          {trigger.label}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <p className="mt-2 text-xs leading-5 text-[#9A887A]">
+                  Choosing a trigger helps Analytics understand
+                  your patterns over time.
+                </p>
               </div>
-
-              <p className="mt-2 text-xs text-[#9A887A]">
-                Choosing a trigger helps Analytics understand your
-                patterns over time.
-              </p>
             </div>
-          </div>
 
-          {/* Buttons */}
-
-          <div className="mt-8 flex gap-3">
-
-            <SecondaryButton
-              type="button"
+            {/* Buttons */}
+            <div
               className="
-                flex-1
-                !border-[#DCC7B4]
-                !bg-[#F6EEE4]
-                !text-[#5F4D42]
+                mt-8
+                flex
+                flex-col
+                gap-3
+                sm:flex-row
               "
-              onClick={onClose}
-              disabled={saving}
             >
-              Cancel
-            </SecondaryButton>
+              <SecondaryButton
+                type="button"
+                className="
+                  min-h-[52px]
+                  flex-1
+                  !border-[#DCC7B4]
+                  !bg-[#F6EEE4]
+                  !text-[#5F4D42]
+                "
+                onClick={onClose}
+                disabled={saving}
+              >
+                Cancel
+              </SecondaryButton>
 
-            <PrimaryButton
-              type="submit"
-              className="
-                flex-1
-                !bg-[#C65D2E]
-                !text-white
-                hover:!bg-[#9F4523]
-              "
-              disabled={saving}
-            >
-              {saving ? "Saving..." : "Save Activity"}
-            </PrimaryButton>
+              <PrimaryButton
+                type="submit"
+                className="
+                  min-h-[52px]
+                  flex-1
+                  !bg-[#C65D2E]
+                  !text-white
+                  hover:!bg-[#9F4523]
+                "
+                disabled={saving}
+              >
+                {saving ? "Saving..." : "Save Activity"}
+              </PrimaryButton>
+            </div>
 
-          </div>
-        </form>
-      </GlassCard>
+            {/* iPhone safe-area spacing */}
+            <div className="h-2 pb-[env(safe-area-inset-bottom)] sm:hidden" />
+          </form>
+        </div>
+      </div>
     </div>
   );
 };
