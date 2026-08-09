@@ -1,18 +1,12 @@
 const Entry = require("../models/Entry");
 
-// ==========================
+// ===============================
 // CREATE ENTRY
-// ==========================
+// ===============================
 const createEntry = async (req, res) => {
   try {
-    const {
-      brand,
-      price,
-      quantity,
-      trigger,
-    } = req.body;
+    const { brand, price, quantity, trigger } = req.body;
 
-    // Validate required fields
     if (!brand || price === undefined || price === null) {
       return res.status(400).json({
         success: false,
@@ -23,27 +17,17 @@ const createEntry = async (req, res) => {
     const entry = await Entry.create({
       brand: brand.trim(),
       price: Number(price),
-      quantity:
-        quantity === undefined || quantity === null || quantity === ""
-          ? 1
-          : Number(quantity),
-
-      // Save the reason/trigger selected by the user
-      trigger:
-        trigger && trigger.trim()
-          ? trigger.trim()
-          : "Not specified",
-
+      quantity: quantity ? Number(quantity) : 1,
+      trigger: trigger?.trim() || "Not specified",
       user: req.user.id,
     });
 
     res.status(201).json({
       success: true,
-      message: "Entry Added",
       entry,
     });
   } catch (err) {
-    console.error("CREATE ENTRY ERROR:", err);
+    console.error("Create entry error:", err);
 
     res.status(500).json({
       success: false,
@@ -52,9 +36,9 @@ const createEntry = async (req, res) => {
   }
 };
 
-// ==========================
+// ===============================
 // GET ALL ENTRIES
-// ==========================
+// ===============================
 const getEntries = async (req, res) => {
   try {
     const entries = await Entry.find({
@@ -65,11 +49,10 @@ const getEntries = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      count: entries.length,
       entries,
     });
   } catch (err) {
-    console.error("GET ENTRIES ERROR:", err);
+    console.error("Get entries error:", err);
 
     res.status(500).json({
       success: false,
@@ -78,12 +61,15 @@ const getEntries = async (req, res) => {
   }
 };
 
-// ==========================
+// ===============================
 // UPDATE ENTRY
-// ==========================
+// ===============================
 const updateEntry = async (req, res) => {
   try {
-    const entry = await Entry.findById(req.params.id);
+    const entry = await Entry.findOne({
+      _id: req.params.id,
+      user: req.user.id,
+    });
 
     if (!entry) {
       return res.status(404).json({
@@ -92,22 +78,8 @@ const updateEntry = async (req, res) => {
       });
     }
 
-    // Make sure the logged-in user owns this entry
-    if (entry.user.toString() !== req.user.id) {
-      return res.status(401).json({
-        success: false,
-        message: "Not authorized",
-      });
-    }
+    const { brand, price, quantity, trigger } = req.body;
 
-    const {
-      brand,
-      price,
-      quantity,
-      trigger,
-    } = req.body;
-
-    // Update only supplied fields
     if (brand !== undefined) {
       entry.brand = brand.trim();
     }
@@ -121,21 +93,17 @@ const updateEntry = async (req, res) => {
     }
 
     if (trigger !== undefined) {
-      entry.trigger =
-        trigger && trigger.trim()
-          ? trigger.trim()
-          : "Not specified";
+      entry.trigger = trigger.trim();
     }
 
     await entry.save();
 
     res.status(200).json({
       success: true,
-      message: "Entry updated successfully",
       entry,
     });
   } catch (err) {
-    console.error("UPDATE ENTRY ERROR:", err);
+    console.error("Update entry error:", err);
 
     res.status(500).json({
       success: false,
@@ -144,12 +112,15 @@ const updateEntry = async (req, res) => {
   }
 };
 
-// ==========================
+// ===============================
 // DELETE ENTRY
-// ==========================
+// ===============================
 const deleteEntry = async (req, res) => {
   try {
-    const entry = await Entry.findById(req.params.id);
+    const entry = await Entry.findOneAndDelete({
+      _id: req.params.id,
+      user: req.user.id,
+    });
 
     if (!entry) {
       return res.status(404).json({
@@ -158,22 +129,12 @@ const deleteEntry = async (req, res) => {
       });
     }
 
-    // Make sure the logged-in user owns this entry
-    if (entry.user.toString() !== req.user.id) {
-      return res.status(401).json({
-        success: false,
-        message: "Not authorized",
-      });
-    }
-
-    await entry.deleteOne();
-
     res.status(200).json({
       success: true,
-      message: "Entry deleted successfully",
+      message: "Entry deleted",
     });
   } catch (err) {
-    console.error("DELETE ENTRY ERROR:", err);
+    console.error("Delete entry error:", err);
 
     res.status(500).json({
       success: false,
@@ -182,6 +143,9 @@ const deleteEntry = async (req, res) => {
   }
 };
 
+// ===============================
+// EXPORTS
+// ===============================
 module.exports = {
   createEntry,
   getEntries,
